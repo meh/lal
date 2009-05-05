@@ -3,3 +3,9 @@ lal, another LOLGUI
 Well, this project will be the GUI base for lulzjs, so, have fun.
 
 It's written in C and it will have a binding for C++ :)
+
+Requirements:
+- nspr
+
+################################
+
