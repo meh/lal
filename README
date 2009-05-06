@@ -6,6 +6,7 @@ It's written in C and it will have a binding for C++ :)
 
 Requirements:
 - nspr
+- libxml2
 
 ################################
 
