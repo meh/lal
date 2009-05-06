@@ -1,12 +1,19 @@
 NAME    = lal
 VERSION = 0.0.1
 
-LIB_NAME = "lib${NAME}.so"
+LIB_NAME = "lib${NAME}-${VERSION}.so"
+
+INST_LIBDIR     = /usr/lib
+INST_HEADERSDIR = /usr/include/lal
+
+DIR     = src
+FILES   = 
+HEADERS = 
 
 CC         = gcc
 CXX		   = g++
-CFLAGS     = -D___VERSION___="\"${VERSION}\"" $(shell nspr-config --cflags) -I./src/
-LDFLAGS    = $(shell nspr-config --libs) -export-dynamic
+CFLAGS     = $(shell nspr-config --cflags) $(shell xml2-config --cflags) -I./include/ -DLAL_LIB_PATH=${INST_LIBDIR} -DLAL_DEFAULT_WRAPPER=${DEFAULT_WRAPPER} -D___VERSION___="\"${VERSION}\""
+LDFLAGS    = $(shell nspr-config --libs) $(shell xml2-config --libs) -export-dynamic
 
 ifdef DEBUG
 CFLAGS += -g3 -DWORKING -Wall
@@ -16,17 +23,10 @@ ifdef DDEBUG
 CFLAGS += -DDEBUG -g3 -Wall
 endif
 
-INST_LIBDIR     = /usr/lib
-INST_HEADERSDIR = /usr/include/lal
-
-DIR     = src
-FILES   = 
-HEADERS = 
-
 all: lal
 
 lal: $(FILES)
-	${CC} ${LDFLAGS} -dynamiclib -shared -o ${FILES} ${LIB_NAME} -lc
+	${CC} ${LDFLAGS} -dynamiclib -shared -o ${LIB_NAME} ${FILES} -lc
 
 $(FILES): $(FILES:.o=.c)
 	${CC} ${CFLAGS} -fPIC -c $*.c -o $*.lo
