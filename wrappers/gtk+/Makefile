@@ -5,8 +5,8 @@ LIB_NAME = "lib${NAME}.so"
 
 CC         = gcc
 CXX		   = g++
-CFLAGS     = -D___VERSION___="\"${VERSION}\"" $(shell nspr-config --cflags) -I./src/
-LDFLAGS    = $(shell nspr-config --libs) -export-dynamic
+CFLAGS     = -D___VERSION___="\"${VERSION}\"" $(shell nspr-config --cflags) $(shell pkg-config --cflags gtk+-2.0) -I./src/
+LDFLAGS    = $(shell nspr-config --libs) $(shell pkg-config --libs gtk+-2.0) -export-dynamic
 
 ifdef DEBUG
 CFLAGS += -g3 -DWORKING -Wall
@@ -17,11 +17,9 @@ CFLAGS += -DDEBUG -g3 -Wall
 endif
 
 INST_LIBDIR     = /usr/lib
-INST_HEADERSDIR = /usr/include/lal
 
 DIR     = src
 FILES   = 
-HEADERS = 
 
 all: lal
 
@@ -36,11 +34,9 @@ install: all
 	mkdir -p ${INST_HEADERSDIR}
 ###
 	chmod a+rx ${INST_LIBDIR}/${LIB_NAME}
-	chmod -R a+r ${INST_HEADERSDIR}
 
 uninstall:
 	rm -f ${INST_LIBDIR}/${LIB_NAME}
-	rm -f ${INST_HEADERSDIR}
 	
 clean:
 	rm -f ${LIB_NAME}
